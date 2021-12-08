@@ -7,6 +7,7 @@ import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -18,28 +19,33 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  */
 @Mixin(ClientPlayerInteractionManager.class)
 public class ClientPlayerInteractionManagerMixin {
+	@Shadow
+	private float currentBreakingProgress;
+	@Shadow
+	private int blockBreakingCooldown;
+
 	@Inject(at = @At("RETURN"), method = "attackBlock")
 	public void onAttackBlock(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
 		if (FastmineMod.doResetDelay())
-			accessors().setBlockBreakingCooldown(0);
+			blockBreakingCooldown = 0;
 	}
 
 	@Inject(at = @At("RETURN"), method = "breakBlock")
 	public void breakBlock(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
 		if (FastmineMod.doResetDelay())
-			accessors().setBlockBreakingCooldown(0);
+			blockBreakingCooldown = 0;
 	}
 
 	@SuppressWarnings("ConstantConditions")
 	@Inject(at = @At("HEAD"), method = "updateBlockBreakingProgress")
 	public void updateBlockBreakingProgress(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
 		if (FastmineMod.doResetDelay())
-			accessors().setBlockBreakingCooldown(0);
+			blockBreakingCooldown = 0;
 		// Skip progress updating if no modification is needed
 		if (FastmineMod.isDefaultSpeed())
 			return;
 		// Get state, update progress again
-		float progress = accessors().getCurrentBreakingProgress();
+		float progress = currentBreakingProgress;
 		MinecraftClient client = MinecraftClient.getInstance();
 		BlockState state = client.world.getBlockState(pos);
 		if (state != null) {
@@ -58,10 +64,6 @@ public class ClientPlayerInteractionManagerMixin {
 			}
 		}
 		// Update progress
-		accessors().setCurrentBreakingProgress(progress);
-	}
-
-	private ClientPlayerInteractionManagerAccessors accessors() {
-		return ((ClientPlayerInteractionManagerAccessors) this);
+		currentBreakingProgress = progress;
 	}
 }
