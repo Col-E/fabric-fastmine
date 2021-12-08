@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "fastmine",
+  "version": "${version}",
+
+  "name": "Fastmine",
+  "description": "I just hate digging slow",
+  "authors": [
+    "Matt Coley"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/Col-E/fabric-fastmine"
+  },
+
+  "license": "MIT",
+  "icon": "assets/fastmine/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "me.coley.fastmine.FastmineMod"
+    ]
+  },
+  "mixins": [
+    "fastmine.mixins.json"
+  ],
+
+  "depends": {
+    "fabric-key-binding-api-v1": "*",
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.18.x",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

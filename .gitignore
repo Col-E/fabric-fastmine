@@ -1,0 +1,6 @@
+# IDE / Build tooling
+.gradle/*
+.idea/*
+
+# Compiled
+build/
