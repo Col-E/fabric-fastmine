@@ -3,9 +3,10 @@ package me.coley.fastmine;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
 /**
@@ -61,7 +62,8 @@ public class FastmineMod implements ClientModInitializer {
 				"category.fastmine"
 		));
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			if (client.player != null) {
+			ClientPlayerEntity player = client.player;
+			if (player != null) {
 				boolean indexDirty = false;
 				while (bindFaster.wasPressed()) {
 					multiplierIndex = clampMultiplierIndex(++multiplierIndex);
@@ -73,11 +75,12 @@ public class FastmineMod implements ClientModInitializer {
 				}
 				while (bindToggleDelay.wasPressed()) {
 					resetDelay = !resetDelay;
-					client.player.sendMessage(new LiteralText("Reset hit delay: " + resetDelay), false);
+					player.sendMessage(Text.literal("Reset hit delay: " + resetDelay), false);
+				}
 				}
 				if (indexDirty) {
 					multiplier = multipilers[multiplierIndex];
-					client.player.sendMessage(new LiteralText("Mining multiplier: " +
+					player.sendMessage(Text.literal("Mining multiplier: " +
 							multiplierStrings[multiplierIndex]), false);
 				}
 			}
