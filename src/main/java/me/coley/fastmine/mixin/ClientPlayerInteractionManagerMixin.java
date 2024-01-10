@@ -50,7 +50,7 @@ public class ClientPlayerInteractionManagerMixin {
 		BlockState state = client.world.getBlockState(pos);
 		if (state != null) {
 			float modifier = FastmineMod.getMultiplier();
-			float increment = state.calcBlockBreakingDelta(client.player, client.player.world, pos);
+			float increment = state.calcBlockBreakingDelta(client.player, client.world, pos);
 			// The progress will be made again after this head injection, so we are adding onto it.
 			// - 2X modifier adds 1X the progress.
 			// - 3X modifier adds 2X the progress.
