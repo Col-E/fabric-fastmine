@@ -77,7 +77,6 @@ public class FastmineMod implements ClientModInitializer {
 					resetDelay = !resetDelay;
 					player.sendMessage(Text.literal("Reset hit delay: " + resetDelay), false);
 				}
-				}
 				if (indexDirty) {
 					multiplier = multipilers[multiplierIndex];
 					player.sendMessage(Text.literal("Mining multiplier: " +
